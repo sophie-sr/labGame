@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://bkqe38fe4r83a"]
+
+[ext_resource type="Script" path="res://scenese/enemy.gd" id="1_eeiwq"]
+[ext_resource type="Texture2D" uid="uid://sqa5603idb8o" path="res://assets/blobbad.png" id="2_wqc5i"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bh2f1"]
+radius = 48.0
+height = 96.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k2fal"]
+radius = 1417.12
+
+[node name="enemy" type="CharacterBody2D"]
+script = ExtResource("1_eeiwq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1069, 1623)
+texture = ExtResource("2_wqc5i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(1068, 1614)
+shape = SubResource("CapsuleShape2D_bh2f1")
+
+[node name="detection_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area"]
+visible = false
+position = Vector2(1068, 1614)
+shape = SubResource("CircleShape2D_k2fal")
+
+[connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
