@@ -10,6 +10,8 @@ func _ready():
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 	multiplayer.connected_to_server.connect(connected_to_server)
 	multiplayer.connection_failed.connect(connection_failed)
+	if "--server" in OS.get_cmdline_args():
+		hostGame()
 	pass # Replace with function body.
 
 
@@ -24,6 +26,11 @@ func peer_connected(id):
 #this gets called on the server and clients	
 func peer_disconnected(id):
 	print("player disconnected " + str(id))
+	GameManager.Players.erase(id)
+	var players = get_tree().get_nodes_in_group("Player")
+	for i in players:
+		if i.name == str(id):
+			i.queue_free()
 
 #called only from clients
 func connected_to_server():
@@ -54,8 +61,8 @@ func StartGame():
 	get_tree().root.add_child(scene)
 	
 	#self.hide()   #For some reason in the tutorial they are hiding sself?
-
-func _on_host_button_down():
+	
+func hostGame():
 	peer = ENetMultiplayerPeer.new()
 	var maxPlayers = 2 #max of 32 players
 	var error = peer.create_server(port, maxPlayers) #
@@ -68,8 +75,10 @@ func _on_host_button_down():
 	
 	multiplayer.set_multiplayer_peer(peer)
 	print("Waiting For Players!")
+
+func _on_host_button_down():
+	hostGame()
 	sendPlayerInformation($LineEdit.text, multiplayer.get_unique_id())
-	
 	pass # Replace with function body.
 
 

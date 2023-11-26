@@ -7,6 +7,8 @@ const JUMP_VELOCITY = -400.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var syncPos = Vector2(0,0)
 var syncRot = 0
+
+
 @export var bullet :PackedScene
 
 func _ready():
@@ -26,10 +28,7 @@ func _physics_process(delta):
 		syncPos = global_position
 		syncRot = rotation_degrees
 		if Input.is_action_just_pressed("Fire"):
-			var b = bullet.instantiate()
-			b.global_position = $GunRotation/BulletSpawn.global_position
-			b.rotation_degrees = $GunRotation.rotation_degrees
-			get_tree().root.add_child(b)
+			fire.rpc()
 
 		# Get the input direction and handle the movement/deceleration.
 		# As good practice, you should replace UI actions with custom gameplay actions.
@@ -40,3 +39,13 @@ func _physics_process(delta):
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 
 		move_and_slide()
+	else:
+		global_position = global_position.lerp(syncPos, .5)
+		rotation_degrees = lerpf(rotation_degrees, syncRot, .5)
+	
+@rpc("any_peer", "call_local")
+func fire():
+	var b = bullet.instantiate()
+	b.global_position = $GunRotation/BulletSpawn.global_position
+	b.rotation_degrees = $GunRotation.rotation_degrees
+	get_tree().root.add_child(b)
