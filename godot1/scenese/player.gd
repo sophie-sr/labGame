@@ -2,7 +2,9 @@ extends CharacterBody2D
 
 
 const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+const JUMP_VELOCITY = -700.0
+const FRICTION: float = 0.15
+const GRAVITY: int = 300
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -26,3 +28,9 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
+	
+func apply_gravity(delta: float) -> void:
+	velocity.y += GRAVITY * delta
+	
+func apply_friction() -> void:
+	velocity.x = lerp(velocity.x, 0.0, FRICTION)
