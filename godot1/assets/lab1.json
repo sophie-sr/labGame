@@ -1,0 +1,14 @@
+{ "columns":6,
+ "image":"asset.png",
+ "imageheight":640,
+ "imagewidth":768,
+ "margin":0,
+ "name":"lab1",
+ "spacing":0,
+ "tilecount":30,
+ "tiledversion":"1.8.5",
+ "tileheight":128,
+ "tilewidth":128,
+ "type":"tileset",
+ "version":"1.8"
+}
